@@ -26,11 +26,25 @@ server.listen(8080, () => {
   console.log("Server running on http://localhost:8080/");
 });
 
-const MONGO_URL =
-  "mongodb+srv://admin:admin@mongocluster.5ippwgz.mongodb.net/?retryWrites=true&w=majority"; // DB URI
+// const MONGO_URL =
+//   "mongodb+srv://admin:admin@mongocluster.5ippwgz.mongodb.net/?retryWrites=true&w=majority"; // DB URI
 
-mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL);
-mongoose.connection.on("error", (error: Error) => console.log(error));
+// mongoose.Promise = Promise;
+// mongoose.connect(MONGO_URL);
+// mongoose.connection.on("error", (error: Error) => console.log(error));
 
-app.use("/", router());
+// app.use("/", router());
+
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const uri =
+  "mongodb+srv://admin:admin@mongocluster.5ippwgz.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
+client.connect(() => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
